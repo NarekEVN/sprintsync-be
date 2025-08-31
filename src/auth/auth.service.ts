@@ -79,7 +79,7 @@ export class AuthService {
 
   async login({ email, password }: LoginDto): Promise<AuthResponseDto> {
     const user = await this.userService.findByEmail(email);
-    if (!user) {
+    if (!user || user.deletedAt) {
       throw new NotFoundException('User with this email does not exist');
     }
 

@@ -26,6 +26,9 @@ export class User {
 
   @Prop()
   refreshToken?: string;
+
+  @Prop({ default: null, type: Date })
+  deletedAt?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
