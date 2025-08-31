@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Task, TaskDocument } from '../schemas/task.schema';
 import { Model } from 'mongoose';
@@ -10,11 +10,15 @@ import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { UpdateTaskAssigneeDto } from './dto/update-task-assignee.dto';
 import { UpdateTaskLogTimeDto } from './dto/update-task-logtime.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { SuggestDescriptionDto } from './dto/suggest-description.dto';
+import { GEMINI_PROVIDER_TOKEN } from '../constants';
+import { GoogleGenAI } from '@google/genai';
 
 @Injectable()
 export class TasksService {
   constructor(
     @InjectModel(Task.name) private readonly taskModel: Model<TaskDocument>,
+    @Inject(GEMINI_PROVIDER_TOKEN) private readonly gemini: GoogleGenAI,
   ) {}
 
   async createTask(
@@ -177,5 +181,34 @@ export class TasksService {
       .populate(['assignee', 'creator']);
 
     return this.sanitizeTask(updatedTask as Task);
+  }
+
+  async suggestDescriptionWithAi(
+    suggestDescriptionDto: SuggestDescriptionDto,
+  ): Promise<string> {
+    const prompt = `
+      You are a senior software engineer. Given a ticket title, write a well-structured,
+      detailed Jira-style ticket description.
+  
+      Ticket Title: ${suggestDescriptionDto.title}
+  
+      Follow this structure:
+      1. **Summary**: Short high-level overview
+      2. **Background/Context**: Why this is needed
+      3. **Acceptance Criteria**: Bullet points of clear success conditions
+      4. **Technical Notes**: Implementation details, dependencies, risks
+      5. **Out of Scope**: What is explicitly not included
+    `;
+
+    const response = await this.gemini.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: prompt,
+      config: {
+        systemInstruction:
+          'You are a senior software engineer writing Jira tickets.',
+      },
+    });
+
+    return response.text as string;
   }
 }

@@ -6,12 +6,13 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TasksModule } from './tasks/tasks.module';
 import jwtConfig from './config/jwt.config';
+import geminiConfig from './config/gemini.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig, jwtConfig],
+      load: [databaseConfig, jwtConfig, geminiConfig],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

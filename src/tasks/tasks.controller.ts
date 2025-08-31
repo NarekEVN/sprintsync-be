@@ -20,6 +20,7 @@ import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { UpdateTaskAssigneeDto } from './dto/update-task-assignee.dto';
 import { UpdateTaskLogTimeDto } from './dto/update-task-logtime.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { SuggestDescriptionDto } from './dto/suggest-description.dto';
 
 @Controller('tasks')
 @UseGuards(JwtAuthGuard)
@@ -66,5 +67,10 @@ export class TasksController {
     @Body() body: UpdateTaskDto,
   ): Promise<TaskResponseDto> {
     return this.taskService.updateTask(taskId, body);
+  }
+
+  @Post('ai/suggest')
+  suggestDescription(@Body() body: SuggestDescriptionDto): Promise<string> {
+    return this.taskService.suggestDescriptionWithAi(body);
   }
 }
