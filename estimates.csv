@@ -1,5 +1,5 @@
 Story,Task,Estimate min (hr),Estimate max (hr),Actual,Comment
-BE-1: Project Setup,Initialize backend project structure (Nest.js) env configs,1,2,,Foundation for all backend work
+BE-1: Project Setup,Initialize backend project structure (Nest.js) env configs,1,2,1.5,Foundation for all backend work
 BE-2: Data Modeling,Implement User & Task models + DB schema with seed data,2,4,,Covers persistence + test data
 BE-3: Task Management API,CRUD APIs for User & Task,2,4,,Includes auto-generated docs (Swagger)
 BE-4: Authentication,Implement JWT auth (login/signup admin flag),2,3,,Required for protected endpoints

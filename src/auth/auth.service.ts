@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
@@ -11,6 +12,7 @@ import { SignupDto } from './dto/signup.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { ConfigService } from '@nestjs/config';
 import { LoginDto } from './dto/login.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -87,6 +89,27 @@ export class AuthService {
       throw new BadRequestException('Invalid password');
     }
 
-    return this.generateTokens(user);
+    const tokens = await this.generateTokens(user);
+    await this.updateRefreshToken(user._id.toString(), tokens.refreshToken);
+
+    return tokens;
+  }
+
+  async refreshToken({
+    refreshToken,
+  }: RefreshTokenDto): Promise<AuthResponseDto> {
+    const payload = await this.jwtService.verifyAsync(refreshToken, {
+      secret: this.configService.get<string>('jwt.refreshSecret'),
+    });
+
+    const user = await this.userService.findById(payload?.sub);
+
+    if (!user || !user.refreshToken || user.refreshToken !== refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    const tokens = await this.generateTokens(user);
+    await this.updateRefreshToken(user._id.toString(), tokens.refreshToken);
+
+    return tokens;
   }
 }
