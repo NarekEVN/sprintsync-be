@@ -12,7 +12,7 @@ import { ObjectId } from 'mongodb';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async findByEmail(email: string): Promise<User | null> {

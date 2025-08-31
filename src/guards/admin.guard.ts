@@ -4,11 +4,11 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { UserService } from '../user/user.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UsersService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

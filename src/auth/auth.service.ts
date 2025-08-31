@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
+import { UsersService } from '../users/users.service';
 import { User } from '../schemas/user.schema';
 import { SignupDto } from './dto/signup.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
@@ -17,7 +17,7 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private userService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}

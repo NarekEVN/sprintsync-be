@@ -10,17 +10,17 @@ import {
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { UserResponseDto } from './dto/user-response.dto';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { RequestUser } from '../types/RequestUser';
 import { AdminGuard } from '../guards/admin.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-@Controller('user')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+@Controller('users')
+export class UsersController {
+  constructor(private readonly userService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('current-user')
+  @Get('current-users')
   getCurrentUser(@CurrentUser() user: RequestUser): Promise<UserResponseDto> {
     return this.userService.getCurrentUser(user.email);
   }

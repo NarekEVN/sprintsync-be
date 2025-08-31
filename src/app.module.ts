@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import databaseConfig from './config/database.config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from './user/user.module';
+import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { TasksModule } from './tasks/tasks.module';
 import jwtConfig from './config/jwt.config';
 
 @Module({
@@ -21,8 +22,9 @@ import jwtConfig from './config/jwt.config';
         retryWrites: true,
       }),
     }),
-    UserModule,
+    UsersModule,
     AuthModule,
+    TasksModule,
   ],
 })
 export class AppModule {}
