@@ -193,7 +193,7 @@ export class TasksService {
   ): Promise<string> {
     const prompt = `
       You are a senior software engineer. Given a ticket title, write a well-structured,
-      detailed Jira-style ticket description. The response should be pure task description, without any additional context.
+      detailed Jira-style ticket description. The response should be pure task description, without any additional context in a plain text format.
   
       Ticket Title: ${suggestDescriptionDto.title}
   
