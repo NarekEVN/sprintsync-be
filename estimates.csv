@@ -5,8 +5,8 @@ BE-3: Task Management API,CRUD APIs for User & Task,2,4,4,Includes auto-generate
 BE-4: Authentication,Implement JWT auth (login/signup admin flag),2,3,2,Required for protected endpoints
 BE-5: Task Workflow,Implement task status transitions (To Do -> In Progress -> Done),1,2,1,Inline update support
 BE-6: AI Endpoint,Implement `/ai/suggest`,2,4,0.5,AI API integration
-OBS-1: Logging,Structured logging for API calls (method/path/userId/latency/errors),2,3,,Helps debugging in prod
-OPS-1: Dockerization,Dockerfile + docker-compose (app + DB),2,4,,Ensure local + prod reproducibility
-OPS-2: Deployment,Deploy app to cloud,2,5,,End-to-end demo requirement
+OBS-1: Logging,Structured logging for API calls (method/path/userId/latency/errors),2,3,2,Helps debugging in prod
+OPS-1: Dockerization,Dockerfile + docker-compose (app + DB),2,4,3,Ensure local + prod reproducibility
+OPS-2: Deployment,Deploy app to cloud,2,5,3,End-to-end demo requirement
 DOC-1: Documentation,Write README,1,2,,For repo clarity
 DOC-2: Demo Video,Record Loom video (demo -> deploy -> code tour),1,2,,≤5 minutes clear walkthrough
