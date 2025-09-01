@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsEnum, IsOptional, IsString } from 'class-validator';
+import {
+  IsDefined,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 import { TaskStatus } from '../../enums/TaskStatus';
 import { IsObjectId } from '../../decorators/is-objectid.decorator';
 
@@ -23,4 +30,10 @@ export class UpdateTaskDto {
   @IsOptional()
   @IsObjectId()
   assigneeId: string;
+
+  @ApiProperty({ type: Number, required: false })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  totalMinutes: number;
 }

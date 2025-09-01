@@ -177,6 +177,9 @@ export class TasksService {
                 assignee: new ObjectId(updateTaskDto.assigneeId),
               }
             : { assignee: null }),
+          ...(updateTaskDto.totalMinutes
+            ? { totalMinutes: updateTaskDto.totalMinutes }
+            : {}),
         },
         { new: true },
       )
