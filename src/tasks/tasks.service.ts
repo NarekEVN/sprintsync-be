@@ -13,6 +13,8 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { SuggestDescriptionDto } from './dto/suggest-description.dto';
 import { GEMINI_PROVIDER_TOKEN } from '../constants';
 import { GoogleGenAI } from '@google/genai';
+import { TotalMinutesFilterDto } from './dto/total-minutes-filter.dto';
+import { TotalMinutesResponseDto } from './dto/total-minutes-response.dto';
 
 @Injectable()
 export class TasksService {
@@ -188,7 +190,7 @@ export class TasksService {
   ): Promise<string> {
     const prompt = `
       You are a senior software engineer. Given a ticket title, write a well-structured,
-      detailed Jira-style ticket description.
+      detailed Jira-style ticket description. The response should be pure task description, without any additional context.
   
       Ticket Title: ${suggestDescriptionDto.title}
   
@@ -209,6 +211,28 @@ export class TasksService {
       },
     });
 
-    return response.text as string;
+    return response.text?.replaceAll('```', '') as string;
+  }
+
+  async getTotalMinutesByAssignee(
+    totalMinutesFilterDto: TotalMinutesFilterDto,
+  ): Promise<TotalMinutesResponseDto> {
+    const sum = await this.taskModel.aggregate([
+      {
+        $match: {
+          assignee: new ObjectId(totalMinutesFilterDto.assigneeId),
+        },
+      },
+      {
+        $group: {
+          _id: '$assignee',
+          totalMinutes: { $sum: '$totalMinutes' },
+        },
+      },
+    ]);
+
+    return {
+      totalMinutes: sum[0]?.totalMinutes ?? 0,
+    };
   }
 }

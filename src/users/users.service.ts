@@ -92,12 +92,22 @@ export class UsersService {
       throw new NotFoundException('User does not exist');
     }
 
+    return this.sanitizeUser(updatedUser);
+  }
+
+  private sanitizeUser(user: User): UserResponseDto {
     return {
-      id: updatedUser._id.toString(),
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
+      id: user._id.toString(),
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isAdmin: user.isAdmin,
     };
+  }
+
+  async getAllUsers(): Promise<UserResponseDto[]> {
+    const users = await this.userModel.find({});
+
+    return users.map((user) => this.sanitizeUser(user));
   }
 }

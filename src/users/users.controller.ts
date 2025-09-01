@@ -20,7 +20,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('current-users')
+  @Get('current-user')
   getCurrentUser(@CurrentUser() user: RequestUser): Promise<UserResponseDto> {
     return this.userService.getCurrentUser(user.email);
   }
@@ -39,5 +39,11 @@ export class UsersController {
     @Body() body: UpdateUserDto,
   ): Promise<UserResponseDto> {
     return this.userService.updateUser(userId, user.userId, body);
+  }
+
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @Get()
+  getAllUsers(): Promise<UserResponseDto[]> {
+    return this.userService.getAllUsers();
   }
 }
