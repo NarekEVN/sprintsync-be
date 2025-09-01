@@ -1,11 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import {
   OperationObject,
   PathItemObject,
 } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
+import morgan from 'morgan';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +26,33 @@ async function bootstrap() {
       'Access-Control-Allow-Credentials',
     ],
   });
+
+  const logger = new Logger('Bootstrap');
+
+  app.use(
+    morgan(
+      ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time ms',
+    ),
+  );
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor());
+
+  // Log application startup
+  logger.log('Application is starting...', {
+    env: process.env.NODE_ENV || 'development',
+  });
+  logger.log('Global logging interceptor and exception filter initialized');
 
   const config = new DocumentBuilder()
     .setTitle('SprintSync API')
