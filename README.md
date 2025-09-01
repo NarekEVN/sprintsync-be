@@ -78,3 +78,7 @@ $ docker run -p 3000:3000 --env-file .env sprintsync-be
 ## 🌐 Live URL
 
 [Production URL](https://sprintsync-be-production-8d9e.up.railway.app/)
+
+[Loom 1](https://www.loom.com/share/59ef4a76a84b4bcda4a6ff37355bd29b?sid=05ba6d9d-1ef2-43b8-bac4-e61f50a6a75d)
+
+[Loom 2](https://www.loom.com/share/8a925606c4de47e9bb9b7839cd61778a?sid=76ed3da0-71f2-4491-ba7c-225fcb531a95)
